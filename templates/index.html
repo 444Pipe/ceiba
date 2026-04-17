@@ -1,168 +1,267 @@
 <!DOCTYPE html>
-<html lang="es">
+<html class="dark" lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Gran Ceiba Gastrobar</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@600;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>La Gran Ceiba Gastrobar | El Sabor del Llano</title>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts: Playfair Display for Headings, Inter for Body -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&family=Manrope:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-container": "#f5c518",
+                        "on-primary": "#3d2f00",
+                        "surface-dim": "#131313",
+                        "surface-container": "#201f1f",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#d1c5ac",
+                        "outline-variant": "#4e4633",
+                        "tertiary": "#ffbab0",
+                        "tertiary-container": "#ffbab0",
+                        "on-tertiary-container": "#a32419"
+                    },
+                    fontFamily: {
+                        "headline": ["'Playfair Display'", "serif"],
+                        "body": ["'Inter'", "sans-serif"],
+                        "label": ["Manrope", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #0A0A0A; color: #e5e2e1; scroll-behavior: smooth; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .fair-light-pulse { animation: flicker 3s infinite alternate; }
+        @keyframes flicker {
+            0%, 100% { opacity: 0.8; filter: blur(1px); transform: scale(1); }
+            50% { opacity: 1; filter: blur(2px); transform: scale(1.1); }
+        }
+        .asymmetric-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-auto-rows: 250px; gap: 1.5rem; }
+        .asymmetric-item:nth-child(odd) { grid-row: span 2; }
+        .asymmetric-item:nth-child(3n) { grid-column: span 1; grid-row: span 1.5; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #primary-container; border-radius: 10px; }
+        
+        /* Lightbox Modal */
+        #lightbox { display: none; }
+        #lightbox.active { display: flex; }
+    </style>
 </head>
-<body>
+<body class="font-body selection:bg-primary-container selection:text-black">
 
-  <nav class="navbar" id="navbar">
-    <div class="container nav-content">
-      <div class="nav-logo">LA GRAN CEIBA</div>
-      <div class="nav-links">
-        <a href="#inicio">Inicio</a>
-        <a href="#nosotros">Nosotros</a>
-        <a href="#menu">Menú</a>
-        <a href="#galeria">Galería</a>
-      </div>
-      <a href="#reservas" class="btn btn-primary" style="padding: 8px 20px;">Reservar</a>
+    <!-- TopNavBar -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-surface-dim/80 backdrop-blur-md shadow-[0_10px_40px_rgba(245,197,24,0.06)] flex justify-between items-center px-8 py-4 max-w-full mx-auto transition-all duration-300 border-b border-outline-variant/20">
+        <div class="flex items-center gap-3">
+            <!-- LOGO INTEGRATION -->
+            <img src="/static/img/logo.jpg" alt="La Gran Ceiba Logo" class="h-16 w-auto rounded-full border border-primary-container/30 object-contain bg-black shadow-[0_0_15px_rgba(245,197,24,0.2)]" onerror="this.src='https://placehold.co/100x100/131313/f5c518?text=LGC&font=playfair-display'">
+        </div>
+        <div class="hidden md:flex space-x-8 items-center font-headline italic tracking-wide text-lg">
+            <a class="text-[#F5C518] border-b-2 border-[#F5C518] pb-1" href="#menu">Catálogo</a>
+            <a class="text-white/80 hover:text-[#F5C518] transition-colors" href="#about">Nosotros</a>
+            <a class="text-white/80 hover:text-[#F5C518] transition-colors" href="#location">Ubicación</a>
+        </div>
+        <a href="#reservations" class="bg-primary-container text-black px-6 py-2 rounded-full font-label font-bold hover:scale-105 hover:shadow-[0_0_15px_rgba(245,197,24,0.4)] transition-all duration-400">
+            Reservar
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <!-- Fair Lights Background Decoration -->
+        <div class="absolute top-0 left-0 w-full h-32 flex justify-around pointer-events-none z-10 px-10">
+            <div class="w-1 h-12 bg-outline-variant/30 relative"><div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-primary-container fair-light-pulse shadow-[0_0_10px_#F5C518]"></div></div>
+            <div class="w-1 h-20 bg-outline-variant/30 relative"><div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-primary-container fair-light-pulse shadow-[0_0_10px_#F5C518]" style="animation-delay: 0.5s"></div></div>
+            <div class="w-1 h-16 bg-outline-variant/30 relative"><div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-primary-container fair-light-pulse shadow-[0_0_10px_#F5C518]" style="animation-delay: 1.2s"></div></div>
+            <div class="w-1 h-24 bg-outline-variant/30 relative"><div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-primary-container fair-light-pulse shadow-[0_0_10px_#F5C518]" style="animation-delay: 0.8s"></div></div>
+        </div>
+        <!-- Hero Content -->
+        <div class="relative z-20 text-center px-6 max-w-4xl scroll-animate">
+            <h1 class="font-headline text-6xl md:text-8xl text-primary-container mb-6 italic tracking-tight opacity-90 drop-shadow-2xl">
+                La Gran Ceiba
+            </h1>
+            <p class="font-body text-2xl md:text-3xl text-on-surface-variant mb-12 font-light">
+                Auténtica experiencia gastronómica del piedemonte llanero.
+            </p>
+            <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+                <a class="w-full md:w-auto px-10 py-4 bg-primary-container text-black font-label font-bold rounded-full text-lg shadow-[0_10px_20px_rgba(245,197,24,0.2)] hover:scale-105 transition-transform duration-400" href="#menu">
+                    Explorar Catálogo
+                </a>
+            </div>
+        </div>
+        <!-- Background Image/Gradient -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-surface-dim/80 to-surface-dim"></div>
+            <!-- REALISTIC IMAGE PLACEHOLDER FOR HERO -->
+            <img alt="Night sky with stars over a tropical forest" class="w-full h-full object-cover opacity-30" src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&q=80&w=2000"/>
+        </div>
+    </header>
+
+    <!-- Sobre Nosotros y Galería -->
+    <section class="py-24 px-8 relative overflow-hidden bg-surface-dim" id="about">
+        <div class="max-w-7xl mx-auto space-y-24 scroll-animate">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8 order-2 md:order-1">
+                    <h2 class="font-headline text-5xl text-on-surface italic leading-tight">
+                        La Magia de la <span class="text-primary-container">Gran Ceiba</span>
+                    </h2>
+                    <p class="font-body text-xl text-on-surface-variant leading-relaxed font-light">
+                        Nuestro nombre proviene del majestuoso árbol que se encuentra en el corazón de nuestro patio. Iluminado bajo las estrellas, ofrece la sombra perfecta para disfrutar de coctelería de autor y platos que conectan los sabores llaneros con las tendencias gourmet modernas.
+                    </p>
+                </div>
+                <!-- IMAGE 1: THE BIG TREE -->
+                <div class="relative group order-1 md:order-2">
+                    <div class="absolute -inset-4 bg-primary-container/10 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div class="rounded-xl overflow-hidden shadow-2xl relative cursor-pointer" onclick="openLightbox(this)">
+                        <!-- Usar la foto subida: "ceiba.jpg" -->
+                        <img alt="La gran ceiba iluminada de verde" class="w-full aspect-square object-cover rounded-xl transition-transform duration-700 group-hover:scale-105" src="/static/img/ceiba.jpg" onerror="this.src='https://images.unsplash.com/photo-1542314831-c6a4d14ce7b5?auto=format&fit=crop&q=80&w=800'"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 text-primary-container flex items-center gap-2">
+                            <span class="material-symbols-outlined">zoom_in</span>
+                            <span class="font-headline italic text-xl">El Árbol Milenario</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <!-- IMAGE 2: OUTDOOR SEATING -->
+                <div class="relative group">
+                    <div class="rounded-xl overflow-hidden shadow-2xl relative cursor-pointer" onclick="openLightbox(this)">
+                        <!-- Usar la foto subida: "patio.jpg" -->
+                        <img alt="Comedor exterior cubierto" class="w-full aspect-[4/3] object-cover rounded-xl transition-transform duration-700 group-hover:scale-105" src="/static/img/patio.jpg" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800'"/>
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary-container text-4xl">zoom_in</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- IMAGE 3: COLORFUL CHAIRS -->
+                <div class="relative group mt-8 md:mt-24">
+                    <div class="rounded-xl overflow-hidden shadow-2xl relative cursor-pointer" onclick="openLightbox(this)">
+                        <!-- Usar la foto subida: "sillas.jpg" -->
+                        <img alt="Sillas acapulco coloridas y columpio amarillo" class="w-full aspect-[4/3] object-cover rounded-xl transition-transform duration-700 group-hover:scale-105" src="/static/img/sillas.jpg" onerror="this.src='https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&q=80&w=800'"/>
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary-container text-4xl">zoom_in</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Catálogo Dinámico -->
+    <section class="py-24 px-8 bg-surface-container-low border-t border-outline-variant/10" id="menu">
+        <div class="max-w-7xl mx-auto scroll-animate">
+            <div class="text-center mb-10">
+                <h3 class="font-headline text-primary-container text-2xl mb-2 italic">Descubre nuestro</h3>
+                <h2 class="font-headline text-5xl text-on-surface">Catálogo Exclusivo</h2>
+            </div>
+            
+            <!-- Filter Buttons -->
+            <div class="flex gap-4 justify-center mb-12 flex-wrap" id="menu-filters">
+                <!-- Se crearán por JS -->
+            </div>
+
+            <!-- Menú Contenedor Dinámico -->
+            <div id="dynamic-menu" class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Los platos se generarán aquí con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservas -->
+    <section class="py-24 px-8 bg-surface-dim relative border-t border-outline-variant/10" id="reservations">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 scroll-animate">
+            <div class="w-full lg:w-1/2">
+                <h2 class="font-headline text-5xl text-on-surface mb-4">Asegura tu <span class="text-primary-container italic">Mesa</span></h2>
+                <p class="font-body text-on-surface-variant text-xl mb-12 font-light">Completa los datos y te confirmaremos rápidamente vía WhatsApp.</p>
+                <form id="resForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="font-label text-sm text-primary-container uppercase tracking-widest">Nombre Completo</label>
+                            <input id="rName" class="w-full bg-surface-container border-0 border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 text-on-surface py-3 transition-colors" placeholder="Tu nombre" type="text" required/>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-label text-sm text-primary-container uppercase tracking-widest">Fecha</label>
+                            <input id="rDate" class="w-full bg-surface-container border-0 border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 text-on-surface py-3 transition-colors" type="date" required/>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="font-label text-sm text-primary-container uppercase tracking-widest">Personas</label>
+                            <select id="rGuests" class="w-full bg-surface-container border-0 border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 text-on-surface py-3 transition-colors">
+                                <option value="2">2 Personas</option>
+                                <option value="4">4 Personas</option>
+                                <option value="6">6 Personas</option>
+                                <option value="8+">8+ Personas</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="font-label text-sm text-primary-container uppercase tracking-widest">Teléfono</label>
+                            <input id="rPhone" class="w-full bg-surface-container border-0 border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 text-on-surface py-3 transition-colors" placeholder="WhatsApp" type="tel"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-5 bg-primary-container text-black font-label font-bold text-xl rounded-xl flex items-center justify-center gap-3 hover:brightness-110 transition-all shadow-lg mt-8">
+                        <span class="material-symbols-outlined">send</span>
+                        Enviar Solicitud
+                    </button>
+                    <p class="text-center text-on-surface-variant text-sm font-label mt-4">Directo al <a class="text-primary-container hover:underline" href="https://wa.me/573213650060">321 365 0060</a></p>
+                </form>
+            </div>
+            
+            <div class="w-full lg:w-1/2 flex flex-col justify-between" id="location">
+                <div class="rounded-2xl overflow-hidden h-[400px] shadow-2xl relative border border-outline-variant/10">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15918.423714246117!2d-73.5786111!3d4.2494444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNMKwMTQnNTguMCJOIDczwrAzNCw0My4wIlc!5e0!3m2!1ses!2sco!4v1614000000000!5m2!1ses!2sco" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0; filter: invert(90%) hue-rotate(180deg) contrast(100%); opacity: 0.8;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                    <div class="absolute inset-0 pointer-events-none border-4 border-primary-container/20 rounded-2xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="w-full pt-16 pb-8 px-10 bg-[#050505] font-body text-sm text-on-surface-variant">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left max-w-7xl mx-auto">
+            <div class="flex items-center justify-center md:justify-start gap-4">
+                <img src="/static/img/logo.jpg" alt="Logo Footer" class="h-12 w-12 rounded-full ring-2 ring-primary-container/50 bg-black" onerror="this.style.display='none'">
+                <span class="font-headline text-2xl text-primary-container">La Gran Ceiba</span>
+            </div>
+            <div class="flex flex-col items-center md:items-start space-y-2">
+                <p>KM 2 vía Restrepo – Cumaral, Meta</p>
+                <p>Abierto todos los días de 6 PM a 1 AM</p>
+            </div>
+            <div class="flex flex-col items-center md:items-end space-y-2">
+                <a href="https://instagram.com" class="hover:text-primary-container transition-colors">@lagranceibagastrobar</a>
+                <p>&copy; 2026 La Gran Ceiba Gastrobar.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LIGHTBOX MODAL -->
+    <div id="lightbox" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm items-center justify-center transition-opacity" onclick="closeLightbox()">
+        <span class="absolute top-6 right-8 text-white cursor-pointer material-symbols-outlined text-4xl hover:text-primary-container transition-colors">close</span>
+        <img id="lightbox-img" class="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-[0_0_40px_rgba(245,197,24,0.15)]" src="">
     </div>
-  </nav>
 
-  <section id="inicio" class="hero">
-    <div class="fairy-lights" id="fairyLights"></div>
-    <div class="container hero-content scroll-anim">
-      <div class="main-logo">
-        <svg viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="48" fill="none" stroke="#F5C518" stroke-width="2"/>
-          <path d="M50 80 C 50 80, 40 60, 40 50 C 30 45, 20 35, 35 25 C 45 15, 55 15, 65 25 C 80 35, 70 45, 60 50 C 60 60, 50 80, 50 80 Z" fill="#F5C518"/>
-        </svg>
-        <h1>La Gran Ceiba</h1>
-        <p>GASTROBAR</p>
-      </div>
-      <h2 class="tagline">El sabor del llano, bajo las estrellas</h2>
-      <div class="hero-buttons">
-        <a href="#menu" class="btn btn-primary">Ver Menú</a>
-        <a href="#reservas" class="btn btn-outline">Reservar Mesa</a>
-      </div>
-    </div>
-  </section>
-
-  <section id="nosotros" class="section-padding">
-    <div class="container about-grid">
-      <div class="scroll-anim">
-        <h2 class="section-title">Nuestra Esencia</h2>
-        <p>En La Gran Ceiba unimos la imponente naturaleza llanera con la mejor gastronomía y coctelería. Un espacio pensado para compartir, disfrutar y celebrar bajo las estrellas.</p>
-        <ul class="info-list">
-          <li><strong>📍 Dirección:</strong> KM 2 vía Restrepo – Cumaral, Meta</li>
-          <li><strong>🕒 Horarios:</strong> Lunes a Domingo • 6:00 PM – 1:00 AM</li>
-          <li><strong>📞 Reservas:</strong> +57 321 3650060</li>
-        </ul>
-      </div>
-      <div class="about-img scroll-anim">
-        <img src="{{ url_for('static', filename='img/about.png') }}" alt="Sobre Nosotros">
-      </div>
-    </div>
-  </section>
-
-  <section id="menu" class="section-padding" style="background:#0F0F0F;">
-    <div class="container text-center">
-      <h2 class="section-title">Menú Destacado</h2>
-      
-      <h3 style="margin-top:2rem; text-align:left;">Hamburguesas 🍔</h3>
-      <div class="menu-grid">
-        <div class="menu-card scroll-anim">
-          <div class="badge">Recomendado</div>
-          <div class="card-img">
-            <img src="{{ url_for('static', filename='img/burger_patrona.png') }}" alt="La Patrona">
-          </div>
-          <div class="card-content text-left">
-            <h3>La Patrona</h3>
-            <p>Doble carne artesanal, queso costeño fundido, tocineta ahumada y salsa de la casa prenderá tu noche.</p>
-            <div class="price">$35.000</div>
-          </div>
-        </div>
-        <div class="menu-card scroll-anim">
-          <div class="card-img">
-            <img src="{{ url_for('static', filename='img/burger_caporal.png') }}" alt="El Caporal">
-          </div>
-          <div class="card-content text-left">
-            <h3>El Caporal</h3>
-            <p>Carne seleccionada 200g, queso cheddar, anillos de cebolla y BBQ al barril.</p>
-            <div class="price">$28.000</div>
-          </div>
-        </div>
-      </div>
-
-      <h3 style="margin-top:3rem; text-align:left;">Perros y Picadas 🌭</h3>
-      <div class="menu-grid">
-        <div class="menu-card scroll-anim">
-          <div class="card-img">
-            <img src="{{ url_for('static', filename='img/hotdog.png') }}" alt="Perro Llanero">
-          </div>
-          <div class="card-content text-left">
-            <h3>Perro Llanero</h3>
-            <p>Salchicha premium, carne desmechada, queso fundido y papas ripio.</p>
-            <div class="price">$22.000</div>
-          </div>
-        </div>
-        <div class="menu-card scroll-anim">
-          <div class="badge">Para compartir</div>
-          <div class="card-img">
-            <img src="{{ url_for('static', filename='img/picada.png') }}" alt="Picada La Gran Ceiba">
-          </div>
-          <div class="card-content text-left">
-            <h3>Picada La Gran Ceiba</h3>
-            <p>Chicharrón, chorizo, morcilla, res a la parrilla, criolla y patacones con hogao.</p>
-            <div class="price">$65.000</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="galeria" class="section-padding">
-    <div class="container text-center">
-      <h2 class="section-title">Ambiente</h2>
-      <div class="gallery-grid">
-        <div class="gallery-item scroll-anim">
-          <img src="{{ url_for('static', filename='img/gallery_1.png') }}" alt="Ambiente 1">
-          <div class="gallery-overlay"><h3 style="color:#fff">El Lugar</h3></div>
-        </div>
-        <div class="gallery-item scroll-anim">
-          <img src="{{ url_for('static', filename='img/gallery_2.png') }}" alt="Ambiente 2">
-          <div class="gallery-overlay"><h3 style="color:#fff">Coctelería</h3></div>
-        </div>
-        <div class="gallery-item scroll-anim">
-          <img src="{{ url_for('static', filename='img/gallery_3.png') }}" alt="Ambiente 3">
-          <div class="gallery-overlay"><h3 style="color:#fff">Noches de Feria</h3></div>
-        </div>
-        <div class="gallery-item scroll-anim">
-          <img src="{{ url_for('static', filename='img/gallery_4.png') }}" alt="Ambiente 4">
-          <div class="gallery-overlay"><h3 style="color:#fff">Eventos</h3></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="reservas" class="section-padding" style="background:#0F0F0F;">
-    <div class="container res-container scroll-anim">
-      <div>
-        <h2 class="section-title" style="margin-bottom: 1rem; text-align: left;">Reserva tu mesa</h2>
-        <p style="margin-bottom: 2rem; color: #ccc;">Asegura tu espacio para una noche increíble vía WhatsApp.</p>
-        <div style="background: rgba(45,80,22,0.2); border: 1px solid var(--green); padding: 20px; border-radius: 10px; display: inline-block;">
-          <p style="color:var(--gold); font-family:var(--font-title); font-size: 1.5rem;">+57 321 3650060</p>
-        </div>
-      </div>
-      <form class="res-form" id="resForm">
-        <input type="text" id="rName" class="form-control" placeholder="Nombre completo" required>
-        <input type="date" id="rDate" class="form-control" required>
-        <input type="number" id="rGuests" class="form-control" placeholder="Número de personas" min="1" required>
-        <button type="submit" class="btn-whatsapp">Reservar por WhatsApp</button>
-      </form>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      <p>&copy; 2026 La Gran Ceiba Gastrobar. Todos los derechos reservados.</p>
-      <p>@lagranceibagastrobar</p>
-    </div>
-  </footer>
-
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="/static/js/script.js"></script>
 </body>
 </html>
