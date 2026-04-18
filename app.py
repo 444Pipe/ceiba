@@ -4,7 +4,7 @@ from whitenoise import WhiteNoise
 
 app = Flask(__name__)
 # Wrap the application with WhiteNoise for serving static files efficiently
-app.wsgi_app = WhiteNoise(app.wsgi_app, root=os.path.abspath(os.path.join(os.path.dirname(__file__), 'static')))
+app.wsgi_app = WhiteNoise(app.wsgi_app, root=os.path.abspath(os.path.join(os.path.dirname(__file__), 'static')), prefix='/static/')
 
 @app.route('/')
 def home():
