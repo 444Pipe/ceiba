@@ -1,14 +1,15 @@
 import os
 from flask import Flask, render_template
-from whitenoise import WhiteNoise
 
 app = Flask(__name__)
-# Wrap the application with WhiteNoise for serving static files efficiently
-app.wsgi_app = WhiteNoise(app.wsgi_app, root=os.path.abspath(os.path.join(os.path.dirname(__file__), 'static')), prefix='/static/')
 
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/health')
+def health():
+    return 'ok'
 
 if __name__ == '__main__':
     # Robustly handle the port environment variable
